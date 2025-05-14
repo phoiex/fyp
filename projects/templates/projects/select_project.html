@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item">Projects</li>
+<li class="breadcrumb-item active">Export Tasks</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Select a Project to Export Tasks</h1>
+    <form method="post" action="/projects/export-tasks/excel/">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="project" class="d-block text-center">Choose a project:</label>
+            <select name="project" id="project" class="form-control">
+                {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Excel Export Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg">Export to Copilot</button>
+        </div>
+    </form>
+
+    <form method="post" action="/projects/export-tasks/txt/">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="project" class="d-block text-center">Choose a project:</label>
+            <select name="project" id="project" class="form-control">
+                {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- TXT Export Button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Update the AI Report</button>
+        </div>
+    </form>
+    <!-- View AI Report Button -->
+    <div class="text-center mt-4">
+        <a href="/dual/" class="btn btn-info btn-lg">View AI Report</a>
+    </div>
+    {% if message %}
+        <div class="alert alert-success mt-3 text-center">
+            {{ message }}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

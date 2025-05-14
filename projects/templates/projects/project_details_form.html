@@ -1,0 +1,193 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item">Projects</li>
+    <li class="breadcrumb-item active">Project Details</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+
+  <!-- Trigger Button to Start the Guide -->
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#guideModal1">
+    Start to crate your project
+  </button>
+
+
+
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-7">
+            <div class="card-group">
+                <div class="card p-4 mb-5">
+                    <div class="card-body">
+                        {% if form.is_valid %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                Congratulations, your project details were submitted successfully!
+                            </div>
+                        {% endif %}
+                        <h1>Project Details</h1>
+                        <p class="text-muted">Fill in the details for your project</p>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-form-label">Project</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-puzzle-piece"></i></span>
+                                    </div>
+                                    {{ form.project }}
+                                    {% if form.project.errors %}
+                                        <ol>
+                                        {% for error in form.project.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Problem Statement</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-file-text"></i></span>
+                                    </div>
+                                    {{ form.problem_statement }}
+                                    {% if form.problem_statement.errors %}
+                                        <ol>
+                                        {% for error in form.problem_statement.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Project Objectives</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-bullseye"></i></span>
+                                    </div>
+                                    {{ form.project_objectives }}
+                                    {% if form.project_objectives.errors %}
+                                        <ol>
+                                        {% for error in form.project_objectives.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Project Scope</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-sitemap"></i></span>
+                                    </div>
+                                    {{ form.project_scope }}
+                                    {% if form.project_scope.errors %}
+                                        <ol>
+                                        {% for error in form.project_scope.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Goals</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-trophy"></i></span>
+                                    </div>
+                                    {{ form.goals }}
+                                    {% if form.goals.errors %}
+                                        <ol>
+                                        {% for error in form.goals.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Assumptions</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-lightbulb-o"></i></span>
+                                    </div>
+                                    {{ form.assumptions }}
+                                    {% if form.assumptions.errors %}
+                                        <ol>
+                                        {% for error in form.assumptions.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label">Constraints</label>
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-exclamation-circle"></i></span>
+                                    </div>
+                                    {{ form.constraints }}
+                                    {% if form.constraints.errors %}
+                                        <ol>
+                                        {% for error in form.constraints.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-dot-circle-o"></i> Submit</button> 
+                                <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Step-by-step Guide Modals -->
+<!-- Modal 1: Guide Step 1 -->
+<div class="modal fade" id="guideModal1" tabindex="-1" role="dialog" aria-labelledby="guideModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="guideModalLabel">GOOD</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>It's almost done. Now we need to collect more project information so that we can build the framework of the entire project for you. Please fill in your basic project information here according to the instructions</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#guideModal2">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

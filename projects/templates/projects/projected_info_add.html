@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'core:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'projects:projects' %}">Projects</a></li>
+    <li class="breadcrumb-item active">Add Projected Info</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+<div class="container">
+    <h2>Add Projected Info</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'projects:projects' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

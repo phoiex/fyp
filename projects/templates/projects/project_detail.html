@@ -1,0 +1,136 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'core:index' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'projects:projects' %}">Projects</a></li>
+    <li class="breadcrumb-item active">Edit Projects</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+<!-- Main Content Area with Gradient Background and Padding -->
+<div class="container mt-5" style="background: linear-gradient(135deg, #f3f4f6, #e0e5ec); padding: 40px; border-radius: 15px;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <!-- Card for project details with shadow and rounded corners -->
+            <div class="card p-4 mb-5 shadow-lg rounded-lg" style="border: none;">
+                <div class="card-body">
+                    <h1 class="text-center text-primary mb-4">Edit Project</h1>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for data in project_data %}
+                            <div class="mb-4">
+                                <!-- Project Information Section -->
+                                <h3 class="mt-4 text-dark font-weight-bold">{{ data.project.name }}</h3>
+                                <p class="text-muted">Edit the project information below:</p>
+
+                                <!-- Project Form Fields (Double Column Layout) -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_name" class="font-weight-bold">Project Name</label>
+                                            {{ data.project_form.name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_slug" class="font-weight-bold">Project Shortcut</label>
+                                            {{ data.project_form.slug }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_assign" class="font-weight-bold">Assigned To</label>
+                                            {{ data.project_form.assign }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_efforts" class="font-weight-bold">Efforts</label>
+                                            {{ data.project_form.efforts }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_status" class="font-weight-bold">Status</label>
+                                            {{ data.project_form.status }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_dead_line" class="font-weight-bold">Deadline</label>
+                                            {{ data.project_form.dead_line }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_company" class="font-weight-bold">Company</label>
+                                            {{ data.project_form.company }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_complete_per" class="font-weight-bold">Completion Percentage</label>
+                                            {{ data.project_form.complete_per }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="id_description" class="font-weight-bold">Project Description</label>
+                                    {{ data.project_form.description }}
+                                </div>
+                                
+                                <!-- Project Details Section -->
+                                <div class="form-group mb-4">
+                                    <h4 class="text-secondary font-weight-bold">Project Details</h4>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-info text-white"><i class="fa fa-file-alt"></i></span>
+                                        </div>
+                                        {{ data.project_details_form.as_p }}
+                                    </div>
+                                </div>
+
+                                <!-- Tasks Section -->
+                                <div class="form-group mb-4">
+                                    <h4 class="text-secondary font-weight-bold">Tasks</h4>
+                                    {% for task, form in data.task_forms.items %}
+                                        <div class="mb-3">
+                                            <h5 class="text-success font-weight-bold">{{ task.task_name }}</h5>
+                                            {{ form.as_p }}
+                                        </div>
+                                    {% empty %}
+                                        <p class="text-muted">No tasks available for this project.</p>
+                                    {% endfor %}
+                                </div>
+
+                                <hr class="my-4">
+                            </div>
+                        {% empty %}
+                            <p class="text-muted">No projects available.</p>
+                        {% endfor %}
+
+                        <!-- Submit Button with Soft Gradient and Hover Effect -->
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn btn-success btn-lg px-4 py-2 shadow-sm rounded-pill" style="transition: all 0.3s ease-in-out;">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% endblock %}
