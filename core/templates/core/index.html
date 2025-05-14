@@ -1,0 +1,142 @@
+{% load staticfiles %}
+
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-gradient-primary text-white py-5" style="text-align: center;">
+          <h3 class="font-weight-bold display-4">Welcome to the Project Manager</h3>
+        </div>
+        
+        
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <h2 class="font-weight-bold text-primary display-3"></h2>
+            <p class="lead text-muted">Welcome to the Project Manager System</p>
+            <hr class="my-4">
+            <p class="text-dark">Register your company and start managing your projects.</p>
+            <p class="text-dark">GOOD</p>
+          </div>
+
+          <div class="text-center">
+            <a href="{% url 'register:new-company' %}" class="btn btn-lg btn-orange shadow-lg px-5 py-3" style="text-decoration: none;">Set Up Your Company</a>
+          </div>
+          
+
+          {% if not user.is_authenticated %}
+          <div class="text-center mt-3">
+            <a href="{% url 'core:login' %}" class="text-primary font-weight-bold">
+              Already registered? Login here
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 美化的CSS样式 -->
+<style>
+  /* 全局设置 */
+  body {
+    background-color: #f0f8ff; /* 淡蓝色背景 */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 页面背景渐变 */
+  .container {
+    background: linear-gradient(135deg, #85d0ff, #ff9f70); /* 淡蓝色到橙色渐变 */
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  /* 设置卡片背景和阴影 */
+  .card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, #00aaff, #ff5733); /* 蓝色到橙色渐变 */
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 40px 0;
+  }
+
+  .card-header h3 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* 卡片内容部分 */
+  .card-body {
+    padding: 40px;
+    text-align: center;
+  }
+
+  .card-body p {
+    font-size: 1.1rem;
+    color: #6c757d;
+  }
+
+  /* 按钮样式 */
+  .btn-orange {
+    background-color: #ff7f50; /* 橙色按钮 */
+    border-color: #ff7f50;
+    transition: all 0.3s ease;
+    border-radius: 50px;
+    padding: 15px 30px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .btn-orange:hover {
+    background-color: #e66c39;
+    border-color: #e66c39;
+    transform: scale(1.05);
+  }
+
+  /* 链接样式 */
+  a.text-primary {
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+
+  a.text-primary:hover {
+    color: #1c87f2;
+    text-decoration: underline;
+  }
+
+  /* 分隔线样式 */
+  hr.my-4 {
+    border: 1px solid #e0e0e0;
+    width: 80%;
+    margin: 30px auto;
+  }
+
+  /* 响应式设置 */
+  @media (max-width: 767px) {
+    .card-header h3 {
+      font-size: 22px;
+    }
+
+    .card-body p {
+      font-size: 1rem;
+    }
+
+    .btn-orange {
+      font-size: 1rem;
+      padding: 12px 25px;
+    }
+  }
+</style>
+{% endblock %}
