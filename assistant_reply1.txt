@@ -1,0 +1,56 @@
+```json
+{
+  "operation": "create",
+  "tasks": [
+    {
+      "task_name": "User Account System Development",
+      "project_id": 3,
+      "assigned_user_ids": [1, 2],
+      "status": "2",
+      "due": "1"
+    },
+    {
+      "task_name": "Product Listing Implementation",
+      "project_id": 3,
+      "assigned_user_ids": [3, 4],
+      "status": "2",
+      "due": "1"
+    },
+    {
+      "task_name": "Shopping Cart Functionality",
+      "project_id": 3,
+      "assigned_user_ids": [5, 6],
+      "status": "1",
+      "due": "1"
+    },
+    {
+      "task_name": "Payment Gateway Integration",
+      "project_id": 3,
+      "assigned_user_ids": [7, 8],
+      "status": "1",
+      "due": "1"
+    },
+    {
+      "task_name": "Frontend UI/UX Design",
+      "project_id": 3,
+      "assigned_user_ids": [9, 10],
+      "status": "1",
+      "due": "1"
+    },
+    {
+      "task_name": "Performance Optimization",
+      "project_id": 3,
+      "assigned_user_ids": [11, 12],
+      "status": "1",
+      "due": "1"
+    },
+    {
+      "task_name": "Security Compliance Check",
+      "project_id": 3,
+      "assigned_user_ids": [13, 14],
+      "status": "1",
+      "due": "1"
+    }
+  ]
+}
+```

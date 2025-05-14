@@ -1,0 +1,190 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+
+{% block breadcrumb %}
+        <li class="breadcrumb-item">Home</li>
+        <li class="breadcrumb-item">Company</li>
+        <li class="breadcrumb-item active">New Company</li>
+{% endblock breadcrumb%}
+
+{% block content %}
+<div class="container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card-group">
+                <div class="card p-4">
+                    <div class="card-body">
+                        {% if created %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                Congratulations, your company was created!
+                            </div>
+                        {% endif %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <h1>Register</h1>
+                            <p class="text-muted">Set up your company registration here</p>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-industry"></i></span>
+                                    </div>
+                                    {{ form.social_name }}
+                                    {% if form.social_name.errors %}
+                                        <ol>
+                                        {% for error in form.social_name.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-industry"></i></span>
+                                    </div>
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                        <ol>
+                                        {% for error in form.name.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                    </div>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <ol>
+                                        {% for error in form.email.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-map-marker"></i></span>
+                                    </div>
+                                    {{ form.city }}
+                                    {% if form.city.errors %}
+                                        <ol>
+                                        {% for error in form.city.errors %}
+                                            <li><strong>{{ error|escape }}</strong></li>
+                                        {% endfor %}
+                                        </ol>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    {{ form.found_date }}
+                                </div>
+                                {% if form.found_date.errors %}
+                                    <ol>
+                                    {% for error in form.found_date.errors %}
+                                        <li><strong>{{ error|escape }}</strong></li>
+                                    {% endfor %}
+                                    </ol>
+                                {% endif %}
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary px-4">Submit</button>
+                                </div>
+                                {% if login_form.errors %}
+                                <div class="alert alert-danger col-12 mt-3" role="alert">
+                                    Wrong username or password
+                                </div>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Step-by-step Guide Modals -->
+<!-- Modal 1: Guide Step 1 -->
+<div class="modal fade" id="guideModal1" tabindex="-1" role="dialog" aria-labelledby="guideModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="guideModalLabel">Step 1: Become the Company Owner</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Before everything starts, consider yourself as the owner of the company, whether it is real or fictional. Begin by registering your company here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#guideModal2">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2: Guide Step 2 -->
+<div class="modal fade" id="guideModal2" tabindex="-1" role="dialog" aria-labelledby="guideModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="guideModalLabel">Step 2: Set Up Your Company</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Now, set up your company. Fill out the information such as company name, email, and the city where your company operates. You can enter any data, whether real or fictional.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#guideModal3">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 3: Guide Step 3 -->
+<div class="modal fade" id="guideModal3" tabindex="-1" role="dialog" aria-labelledby="guideModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="guideModalLabel">Step 3: Add Your Projects and Tasks</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Once your company is set up, go ahead and create projects, assign employees, and set up tasks for them. This is where you can define your company's operations.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Trigger Button to Start the Guide -->
+<button type="button" class="btn btn-info" data-toggle="modal" data-target="#guideModal1">
+  Start Company Registration Guide
+</button>
+
+{% endblock %}

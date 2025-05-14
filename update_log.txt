@@ -1,0 +1,100 @@
+Project Name: webdevelopment for shopping website
+Project Description: develop a shopping web
+Deadline: 2025-07-19
+Company: 澳门大学
+
+Problem Statement: Problem Statement:
+The project aims to create a user-friendly and scalable shopping website to address the challenges of slow page load times, complex navigation, and lack of integrated payment systems in existing e-commerce platforms. The goal is to imp
+Project Objectives: Project Objectives:
+
+Develop a responsive and intuitive web interface for easy navigation.
+
+Implement a secure payment gateway to support multiple payment methods.
+
+Optimize website speed to reduce load times to under 2 seconds.
+
+Integrate a product catalog and inventory management system for real-time updates.
+Project Scope: Project Scope:
+The project will focus on developing the front-end and back-end for the shopping website, including the user interface, product management, and payment system. Mobile responsiveness and accessibility across multiple devices will be ensured. The project will not involve mobile app development or customer service infrastructure.
+Goals: Goals:
+
+Launch a fully functional e-commerce website with a smooth shopping experience.
+
+Achieve a minimum user satisfaction rate of 85% based on post-launch surveys.
+
+Ensure secure transactions and compliance with data privacy laws.
+
+Reach at least 1,000 daily active users within the first 3 months of launch.
+Assumptions: Assumptions:
+
+The project will have access to necessary resources, including servers and payment gateways.
+
+The client will provide timely feedback during the design and development phases.
+
+All external APIs, such as payment processing systems, will be available and stable throughout the project.
+Constraints: Constraints:
+
+The project must be completed within a 6-month timeframe.
+
+Budget limitations may affect the scope of the website's features, especially in the initial phase.
+
+The website must comply with all applicable data protection regulations, which may limit certain data usage practices.
+
+Business Process: 
+User Requirements: 
+Non-functional Requirements: 
+User Roles/Permissions: 
+System Integration: 
+Technical Architecture: 
+Data Management: 
+UI Interaction Design: 
+Security Compliance: 
+Acceptance Criteria: 
+Project Budget: 
+Project Timeline: 
+Risk Management: 
+Post Deployment Support: 
+Legal Compliance: 
+Extra Information: 
+
+Tasks:
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: User Account System Development
+Assigned Users: xiaoqibpnm
+Status: 2
+Due: 1
+
+Task Name: 东京
+Assigned Users: xiaoqibpnm
+Status: 1
+Due: 1
+
