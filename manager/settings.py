@@ -173,7 +173,7 @@ if os.getcwd() == '/app':
 
 X_FRAME_OPTIONS = 'ALLOWALL'
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
 CSRF_COOKIE_SECURE = False
@@ -181,5 +181,5 @@ CSRF_COOKIE_SECURE = False
 # settings.py
 
 # 允许所有来源的 CSRF 请求（不推荐在生产环境使用）
-CSRF_TRUSTED_ORIGINS = ['*']  # 允许所有来源
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']  # 允许所有来源
 
