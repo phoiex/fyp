@@ -3,12 +3,15 @@ import time
 import traceback
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-
-# 初始化 OpenAI API 客户端
-client = OpenAI(api_key="sk-ac745008ee204352b31db43a04f483a3", base_url="https://api.deepseek.com")
+from dotenv import load_dotenv
 import os
 
+# load environment variables from .env file
+load_dotenv()
+api_key = os.getenv("DEEPSEEK_API_KEY")
 
+# 初始化 OpenAI API 客户端
+client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
 # 获取并打印当前工作目录
 current_directory = os.getcwd()

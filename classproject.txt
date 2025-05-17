@@ -9,48 +9,48 @@
 {'id': 34, 'project_id': 3, 'task_name': 'User Account System Development', 'status': '2', 'due': '1'}
 
 
-业务流程
-业务流程主要包括开发一个高效的购物网站，涉及产品展示、用户账户管理、购物车功能和支付集成等任务。当前重点关注后端API和数据库集成，后续将进一步聚焦UI/UX设计、安全合规和性能优化。
+Business process
+The business process mainly includes developing an efficient shopping website, involving tasks such as product display, user account management, shopping cart function and payment integration. The current focus is on backend API and database integration, and the subsequent focus will be further on UI/UX design, security compliance and performance optimization.
 
-用户需求
-用户需要一个响应迅速、操作直观的购物网站，支持轻松的导航、确保交易安全并实现顺畅的结账流程。网站还应支持多种支付方式，并通过集成的产品目录和库存管理系统实现实时更新。
+User needs
+Users need a responsive and intuitive shopping site that supports easy navigation, secure transactions and a smooth checkout process. The site should also support multiple payment methods and be updated in real time through an integrated product catalog and inventory management system.
 
-非功能性需求
-网站加载时间需控制在2秒以内，且具有良好的移动设备适配性，能够在多种设备上流畅访问。网站应支持高流量访问且保证最低的停机时间，具备良好的可扩展性，以应对未来的增长。设计需要符合用户友好性和可访问性标准。
+Non-functional requirements
+The website loading time should be controlled within 2 seconds, and it should be well adapted to mobile devices and can be accessed smoothly on multiple devices. The website should support high traffic access with minimal downtime and have good scalability to cope with future growth. The design needs to meet user-friendliness and accessibility standards.
 
-用户角色与权限
-系统需支持不同的用户角色，包括客户、管理员和访客。客户可以查看产品、进行购买并管理个人账户；管理员则可以管理产品列表、订单和用户数据。系统必须确保正确实施权限管理，保障数据隐私和安全。
+User roles and permissions
+The system needs to support different user roles, including customers, administrators, and guests. Customers can view products, make purchases, and manage their personal accounts; administrators can manage product lists, orders, and user data. The system must ensure that permission management is properly implemented to ensure data privacy and security.
 
-系统集成
-项目将集成第三方系统，例如支付网关，确保交易的安全性。与库存管理系统的集成保证产品的实时更新和库存数据的准确性。此外，还需保证外部API（如支付处理系统）的稳定性和可用性。
+System integration
+The project will integrate third-party systems, such as payment gateways, to ensure transaction security. Integration with inventory management systems ensures real-time updates of products and accuracy of inventory data. In addition, the stability and availability of external APIs (such as payment processing systems) must be guaranteed.
 
-技术架构
-系统架构由前端用户界面和后端数据库组成，前端采用响应式网页设计，后端使用安全数据库存储用户、产品和交易数据。系统将托管在可靠的云平台上，确保具有良好的可扩展性和高可用性。
+Technical architecture
+The system architecture consists of a front-end user interface and a back-end database. The front-end uses a responsive web design, and the back-end uses a secure database to store user, product, and transaction data. The system will be hosted on a reliable cloud platform to ensure good scalability and high availability.
 
-数据管理
-数据管理涉及用户数据的安全存储与处理，包括个人信息和交易详情。必须遵守数据保护法规，确保用户数据的安全，并保证隐私得到保护。
+Data management
+Data management involves the secure storage and processing of user data, including personal information and transaction details. Data protection regulations must be followed to ensure that user data is secure and privacy is protected.
 
-UI/UX设计
-UI/UX设计将注重提供易于导航的界面，提升购物体验。前端设计会针对桌面端和移动端进行优化，确保用户能够快速浏览、添加产品到购物车并顺利完成购买。
+UI/UX design
+UI/UX design will focus on providing an easy-to-navigate interface to enhance the shopping experience. The front-end design will be optimized for desktop and mobile to ensure that users can quickly browse, add products to the shopping cart and complete the purchase smoothly.
 
-安全合规
-网站必须符合安全标准，确保交易安全并防止数据泄露。它还必须遵守相关的安全法规和标准，如GDPR、支付卡行业数据安全标准（PCI-DSS）以及SSL加密等。
+Security Compliance
+The website must meet security standards to ensure transaction security and prevent data breaches. It must also comply with relevant security regulations and standards such as GDPR, Payment Card Industry Data Security Standard (PCI-DSS), and SSL encryption.
 
-验收标准
-项目被视为成功的标准是网站能够完全正常运行，安全性高并且用户友好。主要验收标准包括用户满意度至少达到85%、支付处理安全且网站性能顺畅，不存在关键性的错误或停机。
+Acceptance criteria
+The project was considered successful if the website was fully functional, secure and user-friendly. Key acceptance criteria included a minimum of 85% user satisfaction, secure payment processing and smooth website performance without critical errors or downtime.
 
-项目预算
-预算受到可用资源的限制，需涵盖网站开发、设计、托管、安全实施和第三方服务（如支付网关）的费用。预算分配将优先考虑后端开发和核心功能，初期阶段可能会限制一些高级功能的实现。
+Project budget
+The budget is limited by available resources and needs to cover the costs of website development, design, hosting, security implementation, and third-party services (such as payment gateways). Budget allocation will prioritize backend development and core functionality, and may limit the implementation of some advanced features in the initial stage.
 
-项目时间表
-项目的时间表为6个月，关键里程碑包括后端开发、前端设计、性能优化和测试。项目预计于2025年7月19日完成，所有主要任务将在此时间框架内完成，以确保按时上线。
+Project timeline
+The project timeline is 6 months, with key milestones including backend development, frontend design, performance optimization and testing. The project is expected to be completed on July 19, 2025, and all major tasks will be completed within this time frame to ensure on-time launch.
 
-风险管理
-风险管理包括识别潜在问题，如反馈延迟、服务器可用性问题或第三方API集成问题。项目团队将通过与利益相关者保持清晰的沟通，并确保资源按时分配来减轻这些风险。
+Risk management
+Risk management includes identifying potential issues such as feedback delays, server availability issues, or third-party API integration issues. The project team will mitigate these risks by maintaining clear communication with stakeholders and ensuring that resources are allocated on time.
 
-部署后支持
-部署后的支持将包括监控网站性能、处理Bug修复以及必要时提供更新。网站将得到维护，确保其长期平稳运行并提供良好的用户体验。
+Post-deployment support
+Post-deployment support will include monitoring site performance, handling bug fixes, and providing updates when necessary. The site will be maintained to ensure it runs smoothly and provides a good user experience in the long term.
 
-法律合规
-项目将确保遵守所有相关的法律法规要求，包括数据保护法律、电商法规和支付安全标准。网站将实施必要的隐私政策和用户协议，以符合这些法律义务。
+Legal Compliance
+The project will ensure compliance with all relevant legal and regulatory requirements, including data protection laws, e-commerce regulations and payment security standards. The website will implement the necessary privacy policies and user agreements to comply with these legal obligations.
 
