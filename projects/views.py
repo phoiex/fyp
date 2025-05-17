@@ -71,7 +71,8 @@ def newProject(request):
             }
             file_path = r'C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\classproject.txt'
             with open(file_path, 'w', encoding='utf-8') as f:  
-                f.write(json.dumps(project_dict, default=str) + '\n')
+                f.write(json.dumps(project_dict, ensure_ascii=False, default=str) + '\n')
+
             return redirect('/projects/project-details/')
         else:
             return render(request, 'projects/new_project.html', {'form': form})
@@ -107,34 +108,35 @@ from django.shortcuts import render, redirect
 from .forms import ProjectDetailsForm
 from .models import Project
 
-from .models import ProjectDetails
+from django.shortcuts import render, get_object_or_404
+from .models import ProjectDetails, Project, Task
+from .forms import ProjectDetailsForm
 import json
-from .models import ProjectDetails, Task
 
 def project_details_view(request):
-    tasks = []  # 默认空列表
+    tasks = []
+    selected_project = None
+
     if request.method == 'POST':
         form = ProjectDetailsForm(request.POST)
         if form.is_valid():
             details = form.save()
-            project = details.project
+            selected_project = details.project
+            tasks = Task.objects.filter(project=selected_project).prefetch_related('assign')
 
-            # 获取该项目对应的任务
-            tasks = Task.objects.filter(project=project).prefetch_related('assign')
-
-            # 写入到 txt 文件
+            # 保存项目数据到txt
             merged_data = {
-                'id': project.id,
-                'name': project.name,
-                'slug': project.slug,
-                'efforts': project.efforts,
-                'status': project.status,
-                'dead_line': project.dead_line,
-                'company_id': project.company_id,
-                'complete_per': project.complete_per,
-                'description': project.description,
-                'add_date': project.add_date,
-                'upd_date': project.upd_date,
+                'id': selected_project.id,
+                'name': selected_project.name,
+                'slug': selected_project.slug,
+                'efforts': selected_project.efforts,
+                'status': selected_project.status,
+                'dead_line': selected_project.dead_line,
+                'company_id': selected_project.company_id,
+                'complete_per': selected_project.complete_per,
+                'description': selected_project.description,
+                'add_date': selected_project.add_date,
+                'upd_date': selected_project.upd_date,
                 'problem_statement': details.problem_statement,
                 'project_objectives': details.project_objectives,
                 'project_scope': details.project_scope,
@@ -146,12 +148,19 @@ def project_details_view(request):
             file_path = r'C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\classproject.txt'
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(json.dumps(merged_data, default=str, ensure_ascii=False) + '\n')
-
-            return render(request, 'projects/project_details_form.html', {'form': form, 'tasks': tasks})
     else:
         form = ProjectDetailsForm()
+        project_id = request.GET.get('project_id')
+        if project_id:
+            selected_project = get_object_or_404(Project, id=project_id)
+            tasks = Task.objects.filter(project=selected_project).prefetch_related('assign')
 
-    return render(request, 'projects/project_details_form.html', {'form': form})
+    return render(request, 'projects/project_details_form.html', {
+        'form': form,
+        'tasks': tasks,
+        'selected_project': selected_project,
+        'projects': Project.objects.all(),  # 用于填充下拉框
+    })
 
 
 

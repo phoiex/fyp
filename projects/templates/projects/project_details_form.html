@@ -19,34 +19,55 @@
 
 <div class="container animated fadeIn">
     <div class="row justify-content-center">
-        <div class="col-7">
+        <div class="col-12">
             <div class="card-group">
                 <div class="card p-4 mb-5">
+                    <form method="get" class="form-inline mb-3">
+                    <label for="project_id" class="mr-2 font-weight-bold">Choose Project:</label>
+                    <select name="project_id" id="project_id" class="form-control mr-2" onchange="this.form.submit()">
+                        <option value="">-- Select a Project --</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}" {% if selected_project and project.id == selected_project.id %}selected{% endif %}>
+                            {{ project.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    </form>
+
                     <div class="card-body">
                         <table class="table mt-4">
                         <thead class="thead-light">
                             <tr>
                             <th>Task Name</th>
+                            <th>Description</th>
                             <th>Status</th>
                             <th>Due</th>
+                            <th>Start Date</th>
+                            <th>Due Date</th>
                             <th>Assignees</th>
+                            <th>Project</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for task in tasks %}
                             <tr>
                             <td>{{ task.task_name }}</td>
+                            <td>{{ task.task_description }}</td>
                             <td>{{ task.get_status_display }}</td>
                             <td>{{ task.get_due_display }}</td>
+                            <td>{{ task.start_date }}</td>
+                            <td>{{ task.due_date }}</td>
                             <td>
                                 {% for user in task.assign.all %}
                                 {{ user.username }}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}
                             </td>
+                            <td>{{ task.project.name }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                         </table>
+
                         {% if form.is_valid %}
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
