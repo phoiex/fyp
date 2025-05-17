@@ -18,10 +18,9 @@ def run_monitoring_script(script_name):
         print(f"运行脚本 {script_name} 时出错: {e}")
 
 if __name__ == "__main__":
-    # 创建进程来并行执行三个脚本
-    script_names = ["aiweb.py", "connection.py", "coversation.py"]
 
-    # 使用 multiprocessing 来并行启动这三个脚本
+    script_names = ["aiweb.py",  "coversation.py"]
+
     processes = []
     for script in script_names:
         process = multiprocessing.Process(target=run_monitoring_script, args=(script,))

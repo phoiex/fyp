@@ -44,27 +44,41 @@ from django.shortcuts import render, redirect
 from .forms import ProjectRegistrationForm
 
 
+from django.shortcuts import render, redirect
+from .forms import ProjectRegistrationForm
+from .models import Project  
+import os
+import json
+
+
 def newProject(request):
     if request.method == 'POST':
         form = ProjectRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()  # 保存表单数据
-
-            # 使用绝对路径进行重定向
-            return redirect('/projects/project-details/')  # 绝对路径
-
+            project = form.save()  # 来来来你告诉你爸为什么这个save能报错
+            project_dict = {
+                'id': project.id,
+                'name': project.name,
+                'slug': project.slug,
+                'efforts': project.efforts,
+                'status': project.status,
+                'dead_line': project.dead_line,
+                'company_id': project.company_id,  
+                'complete_per': project.complete_per,
+                'description': project.description,
+                'add_date': project.add_date,
+                'upd_date': project.upd_date,
+            }
+            file_path = r'C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\classproject.txt'
+            with open(file_path, 'w', encoding='utf-8') as f:  
+                f.write(json.dumps(project_dict, default=str) + '\n')
+            return redirect('/projects/project-details/')
         else:
-            # 表单无效，返回同一页面，显示错误
-            context = {'form': form}
-            return render(request, 'projects/new_project.html', context)
-    
+            return render(request, 'projects/new_project.html', {'form': form})
     else:
-        # 初始访问页面时显示空表单
         form = ProjectRegistrationForm()
-        context = {'form': form}
-        return render(request, 'projects/new_project.html', context)
+        return render(request, 'projects/new_project.html', {'form': form})
 
- # projects/views.py
 
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, redirect
@@ -93,16 +107,53 @@ from django.shortcuts import render, redirect
 from .forms import ProjectDetailsForm
 from .models import Project
 
+from .models import ProjectDetails
+import json
+from .models import ProjectDetails, Task
+
 def project_details_view(request):
+    tasks = []  # 默认空列表
     if request.method == 'POST':
         form = ProjectDetailsForm(request.POST)
         if form.is_valid():
-            form.save()  # 保存项目详情
-            return redirect('/projects/projects-edit')
+            details = form.save()
+            project = details.project
+
+            # 获取该项目对应的任务
+            tasks = Task.objects.filter(project=project).prefetch_related('assign')
+
+            # 写入到 txt 文件
+            merged_data = {
+                'id': project.id,
+                'name': project.name,
+                'slug': project.slug,
+                'efforts': project.efforts,
+                'status': project.status,
+                'dead_line': project.dead_line,
+                'company_id': project.company_id,
+                'complete_per': project.complete_per,
+                'description': project.description,
+                'add_date': project.add_date,
+                'upd_date': project.upd_date,
+                'problem_statement': details.problem_statement,
+                'project_objectives': details.project_objectives,
+                'project_scope': details.project_scope,
+                'goals': details.goals,
+                'assumptions': details.assumptions,
+                'constraints': details.constraints,
+            }
+
+            file_path = r'C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\classproject.txt'
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(json.dumps(merged_data, default=str, ensure_ascii=False) + '\n')
+
+            return render(request, 'projects/project_details_form.html', {'form': form, 'tasks': tasks})
     else:
         form = ProjectDetailsForm()
 
     return render(request, 'projects/project_details_form.html', {'form': form})
+
+
 
 
 
