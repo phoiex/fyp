@@ -94,8 +94,12 @@ def interact_with_deepseek(messages):
             "- If it is a 'create' operation, please return a list of task information, each task is a dictionary.\n"
             "- If it is an 'update' operation, please return the task to be updated and its ID.\n"
             "- If it is a 'delete' operation, please return the ID of the task to be deleted.\n"
-        )
-    })
+        )},
+        {
+            "role": "user",
+            "content": messages
+        }
+    )
 
     try:
         # Call the DeepSeek Reasoner model
