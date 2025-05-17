@@ -2,129 +2,77 @@
 {% load staticfiles %}
 
 {% block breadcrumb %}
-        <li class="breadcrumb-item">Home</li>
-        <li class="breadcrumb-item">Projects</li>
-        <li class="breadcrumb-item active">New Task</li>
-{% endblock breadcrumb%}
-
-
-
-
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item">Projects</li>
+    <li class="breadcrumb-item active">New Task</li>
+{% endblock breadcrumb %}
 
 {% block content %}
 <div class="container animated fadeIn">
-        <div class="row justify-content-center">
-            <div class="col-7">
-                <div class="card-group">
-                    <div class="card p-4 mb-5">
-                        <div class="card-body">
-                            {% if created %}
-                              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                  </button>
-                                  Congratulations, your task was created!
-                              </div>
-                            {% endif %}
-                                {% csrf_token %}
-                                <h1>Tasks</h1>
-                                <p class="text-muted">Create your tasks here</p>
-                                <form action="" method="post">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        <label class="col-form-label">Project</label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-puzzle-piece"></i></span>
-                                            </div>
-                                            {{ form.project }}
-                                            {% if form.project.errors %}
-                                                <ol>
-                                                {% for error in form.project.errors %}
-                                                    <li><strong>{{ error|escape }}</strong></li>
-                                                {% endfor %}
-                                                </ol>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">Assign. <i>Crtl+click for multiple selection</i></label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                            </div>
-                                            {{ form.assign }}
-                                            {% if form.assign.errors %}
-                                                <ol>
-                                                {% for error in form.assign.errors %}
-                                                    <li><strong>{{ error|escape }}</strong></li>
-                                                {% endfor %}
-                                                </ol>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">Task name</label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-align-center"></i></span>
-                                            </div>
-                                            {{ form.task_name }}
-                                            {% if form.task_name.errors %}
-                                                <ol>
-                                                {% for error in form.task_name.errors %}
-                                                    <li><strong>{{ error|escape }}</strong></li>
-                                                {% endfor %}
-                                                </ol>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">Status</label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-circle"></i></span>
-                                            </div>
-                                            {{ form.status }}
-                                            {% if form.status.errors %}
-                                                <ol>
-                                                {% for error in form.status.errors %}
-                                                    <li><strong>{{ error|escape }}</strong></li>
-                                                {% endfor %}
-                                                </ol>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label">Due</label>
-                                        <div class="input-group">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                            {{ form.due }}
-                                        </div>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div class="card p-4 mb-5">
+                <div class="card-body">
+                    {% if created %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            Congratulations, your task was created!
+                        </div>
+                    {% endif %}
 
-                                        {% if form.due.errors %}
-                                                <ol>
-                                                {% for error in form.due.errors %}
-                                                    <li><strong>{{ error|escape }}</strong></li>
-                                                {% endfor %}
-                                                </ol>
-                                            {% endif %}
-                                    </div>
+                    <h1>Tasks</h1>
+                    <p class="text-muted">Create your task here</p>
 
-                                    <div class="">
-                                        <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-dot-circle-o"></i> Submit</button>
-                                        <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form.visible_fields %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            {% if field.name == "project" %}<i class="fa fa-puzzle-piece"></i>
+                                            {% elif field.name == "assign" %}<i class="fa fa-user"></i>
+                                            {% elif field.name == "task_name" %}<i class="fa fa-align-center"></i>
+                                            {% elif field.name == "task_description" %}<i class="fa fa-file-text-o"></i>
+                                            {% elif field.name == "status" %}<i class="fa fa-circle"></i>
+                                            {% elif field.name == "due" %}<i class="fa fa-calendar-check-o"></i>
+                                            {% elif field.name == "due_date" or field.name == "start_date" %}<i class="fa fa-calendar"></i>
+                                            {% else %}<i class="fa fa-edit"></i>
+                                            {% endif %}
+                                        </span>
                                     </div>
-                                </form>
-                            {{ form.errors }}
-                    </div>
+                                    {{ field }}
+                                </div>
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ field.errors.as_ul }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa fa-check"></i> Submit
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fa fa-undo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger mt-3">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 {% endblock %}

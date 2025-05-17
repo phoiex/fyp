@@ -22,43 +22,44 @@ class TaskRegistrationForm(forms.ModelForm):
     project = forms.ModelChoiceField(queryset=Project.objects.all())
     assign = forms.ModelMultipleChoiceField(queryset=User.objects.all())
     task_name = forms.CharField(max_length=80)
+    task_description = forms.CharField(max_length=180, widget=forms.Textarea)
     status = forms.ChoiceField(choices=status)
     due = forms.ChoiceField(choices=due)
+    due_date = forms.CharField(max_length=80)
+    start_date = forms.CharField(max_length=80)
 
     class Meta:
         model = Task
         fields = '__all__'
 
-
     def save(self, commit=True):
         task = super(TaskRegistrationForm, self).save(commit=False)
         task.project = self.cleaned_data['project']
         task.task_name = self.cleaned_data['task_name']
+        task.task_description = self.cleaned_data['task_description']
         task.status = self.cleaned_data['status']
         task.due = self.cleaned_data['due']
-        task.save()
-        assigns = self.cleaned_data['assign']
-        for assign in assigns:
-            task.assign.add((assign))
-
+        task.due_date = self.cleaned_data['due_date']
+        task.start_date = self.cleaned_data['start_date']
         if commit:
             task.save()
-
+            task.assign.set(self.cleaned_data['assign'])
         return task
-
 
     def __init__(self, *args, **kwargs):
         super(TaskRegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['project'].widget.attrs['class'] = 'form-control'
-        self.fields['project'].widget.attrs['placeholder'] = 'Social Name'
-        self.fields['task_name'].widget.attrs['class'] = 'form-control'
-        self.fields['task_name'].widget.attrs['placeholder'] = 'Name'
-        self.fields['status'].widget.attrs['class'] = 'form-control'
-        self.fields['status'].widget.attrs['placeholder'] = 'Email'
-        self.fields['due'].widget.attrs['class'] = 'form-control'
-        self.fields['due'].widget.attrs['placeholder'] = 'City'
-        self.fields['assign'].widget.attrs['class'] = 'form-control'
-        self.fields['assign'].widget.attrs['placeholder'] = 'Found date'
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+        
+        self.fields['project'].widget.attrs['placeholder'] = 'Select Project'
+        self.fields['task_name'].widget.attrs['placeholder'] = 'Enter Task Name'
+        self.fields['task_description'].widget.attrs['placeholder'] = 'Enter Task Description'
+        self.fields['status'].widget.attrs['placeholder'] = 'Select Status'
+        self.fields['due'].widget.attrs['placeholder'] = 'Select Due Type'
+        self.fields['due_date'].widget.attrs['placeholder'] = 'Enter Due Date'
+        self.fields['start_date'].widget.attrs['placeholder'] = 'Enter Start Date'
+        self.fields['assign'].widget.attrs['placeholder'] = 'Select Assignees'
+
 
 
 class ProjectRegistrationForm(forms.ModelForm):
@@ -172,16 +173,51 @@ class ProjectForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Describe the project...'}),
         }
 
+from django import forms
+from .models import Task
+
 class TaskForm(forms.ModelForm):
     class Meta:
-        model = Task  
-        fields = ['task_name', 'assign', 'status', 'due']
+        model = Task
+        fields = [
+            'task_name', 
+            'assign', 
+            'status', 
+            'due', 
+            'task_description', 
+            'start_date', 
+            'due_date'
+        ]
         widgets = {
-            'task_name': forms.TextInput(attrs={'class': 'form-control font-weight-bold', 'placeholder': 'Task name'}),
-            'assign': forms.Select(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control'}),
-            'due': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'task_name': forms.TextInput(attrs={
+                'class': 'form-control font-weight-bold', 
+                'placeholder': 'Task name'
+            }),
+            'assign': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'due': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'type': 'date'
+            }),
+            'task_description': forms.Textarea(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Task description', 
+                'rows': 3
+            }),
+            'start_date': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'type': 'date'
+            }),
+            'due_date': forms.DateInput(attrs={
+                'class': 'form-control', 
+                'type': 'date'
+            }),
         }
+
 
 
 class ProjectDetailsFormedit(forms.ModelForm):

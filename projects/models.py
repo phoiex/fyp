@@ -41,8 +41,11 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     assign = models.ManyToManyField(User)
     task_name = models.CharField(max_length=80)
+    task_description= models.CharField(max_length=180)
     status = models.CharField(max_length=7, choices=status, default=1)
     due = models.CharField(max_length=7, choices=due, default=1)
+    due_date= models.CharField(max_length=80)
+    start_date= models.CharField(max_length=80)
 
     class Meta:
         ordering = ['project', 'task_name']
