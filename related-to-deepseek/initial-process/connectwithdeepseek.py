@@ -15,7 +15,7 @@ embedding_model = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-mpnet-base-v2",
     model_kwargs={'device': 'cpu'}
 )
-db_dir = os.path.join(os.path.dirname(__file__), "chroma_db")
+db_dir = os.path.join(os.path.dirname(__file__), "./chroma_db")
 vectordb = Chroma(persist_directory=db_dir, embedding_function=embedding_model)
 
 
