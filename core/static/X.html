@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        /* Use Flexbox for left and right layout */
+        /* 使用 Flexbox 进行左右排布 */
         .container {
             display: flex;
-            justify-content: space-between;
-            height: 800px;
+            justify-content: space-between;  /* 保证两个 iframe 之间有间隔 */
+            height: 800px;  /* 设置容器高度 */
         }
         iframe {
-            border: none;
-            height: 100%;
+            border: none;  /* 去掉 iframe 的边框 */
+            height: 100%;   /* 高度自适应容器 */
         }
         #django-frame {
-            width: 48%;  /* Set Django iframe to 48% of width */
+            width: 48%;  /* 设置 Django iframe 占宽度的 48% */
         }
         #aiweb-frame {
-            width: 48%;  /* Set aiweb iframe to 48% of width */
+            width: 48%;  /* 设置 aiweb iframe 占宽度的 48% */
         }
     </style>
 </head>
 <body>
    
 
-    <!-- Using Flexbox container to place two iframes -->
+    <!-- 使用 Flexbox 容器来放置两个 iframe -->
     <div class="container">
-        <!-- Embedding a Django page -->
+        <!-- 嵌入 Django 页面 -->
         <iframe id="django-frame" src="http://127.0.0.1:8000/projects/export_tasks/"></iframe>
         
-        <!-- Embed aiweb.html page -->
+        <!-- 嵌入 aiweb.html 页面 -->
         <iframe id="aiweb-frame" src="aiweb.html"></iframe>
     </div>
 </body>
