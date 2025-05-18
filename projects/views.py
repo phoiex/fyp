@@ -392,7 +392,8 @@ def export_tasks_txt(request):
         tasks = Task.objects.filter(project=project)
 
         txt_save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\update_log.txt"
-        with open(txt_save_path, 'w') as f:
+        with open(txt_save_path, 'w', encoding='utf-8') as f:
+
             # 写入项目基本信息
             f.write(f"Project Name: {project.name}\n")
             f.write(f"Project Description: {project.description}\n")
