@@ -269,10 +269,30 @@ from .models import Project, Task, ProjectDetails, ProjectedInfo
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 import os
-
 def export_tasks_excel(request):
-    from openpyxl import Workbook, load_workbook
+    from openpyxl import load_workbook
+    from openpyxl.utils import range_boundaries
+    from openpyxl.worksheet.table import Table
     import os
+
+    def get_first_table(ws):
+        for tbl in ws._tables:
+            if isinstance(tbl, Table):
+                return tbl
+            elif isinstance(tbl, str):
+                return ws.tables.get(tbl)
+        return None
+
+    def clear_table_data_and_get_bounds(ws):
+        table = get_first_table(ws)
+        if not table:
+            return None, None, None
+        min_col, min_row, max_col, max_row = range_boundaries(table.ref)
+        for row in ws.iter_rows(min_row=min_row + 1, max_row=max_row, min_col=min_col, max_col=max_col):
+            for cell in row:
+                cell.value = None
+        table.ref = f"{ws.cell(row=min_row, column=min_col).coordinate}:{ws.cell(row=min_row, column=max_col).coordinate}"
+        return min_row, min_col, max_col
 
     projects = Project.objects.all()
 
@@ -280,72 +300,72 @@ def export_tasks_excel(request):
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
         tasks = Task.objects.filter(project=project)
-        planners = Planner.objects.all()  # 获取所有 Planner 数据
+        planners = Planner.objects.all()
 
-        save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\test.xlsx"
+        save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\donload.xlsx"
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
-        # 打开或新建工作簿
-        if os.path.exists(save_path):
-            wb = load_workbook(save_path)
-            # 清除旧工作表
-            for sheet_name in ['CustomerData', 'CustomerInfo']:
-                if sheet_name in wb.sheetnames:
-                    wb.remove(wb[sheet_name])
-            ws_data = wb.create_sheet('CustomerData')
-            ws_info = wb.create_sheet('CustomerInfo')
-        else:
-            wb = Workbook()
-            ws_data = wb.active
-            ws_data.title = 'CustomerData'
-            ws_info = wb.create_sheet('CustomerInfo')
+        wb = load_workbook(save_path)
 
-        # 写 CustomerData（任务导出）
-        headers_data = [
-            'User ID', 'Task ID', 'Task Name', 'Assign', 'Status',
-            'Due', 'Task Description', 'Start Date', 'Due Date'
-        ]
-        ws_data.append(headers_data)
+        # ---- CustomerData ----
+        if 'CustomerData' in wb.sheetnames:
+            ws_data = wb['CustomerData']
+            bounds = clear_table_data_and_get_bounds(ws_data)
+            if all(bounds):
+                min_row, min_col, max_col = bounds
 
-        row_count = 0
-        for i, task in enumerate(tasks, start=1):
-            row_count += 1
-            assign_users = task.assign.all()
-            user_id = assign_users[0].id if assign_users else ''
-            assign_names = ', '.join([user.username for user in assign_users]) if assign_users else ''
+                for row_index, task in enumerate(tasks, start=1):
+                    assign_users = task.assign.all()
+                    user_id = assign_users[0].id if assign_users else ''
+                    assign_names = ', '.join([user.username for user in assign_users]) if assign_users else ''
+                    row = [
+                        user_id or 0,
+                        task.id or row_index,
+                        task.task_name or 0,
+                        assign_names or 0,
+                        task.get_status_display() if task.status else 0,
+                        task.get_due_display() if task.due else 0,
+                        task.task_description or 0,
+                        task.start_date or 0,
+                        task.due_date or 0,
+                    ]
+                    write_row = min_row + row_index
+                    for col_idx, value in enumerate(row, start=1):
+                        ws_data.cell(row=write_row, column=col_idx, value=value)
 
-            row = [
-                user_id if user_id != '' else 0,
-                task.id if task.id else i,
-                task.task_name if task.task_name else 0,
-                assign_names if assign_names else 0,
-                task.get_status_display() if task.status else 0,
-                task.get_due_display() if task.due else 0,
-                task.task_description if task.task_description else 0,
-                task.start_date if task.start_date else 0,
-                task.due_date if task.due_date else 0,
-            ]
-            ws_data.append(row)
+                for i in range(len(tasks) + 1, 51):
+                    write_row = min_row + i
+                    empty_row = [''] * 9
+                    empty_row[1] = i
+                    for col_idx, value in enumerate(empty_row, start=1):
+                        ws_data.cell(row=write_row, column=col_idx, value=value)
 
-        # 补足 Task ID 到50行
-        for i in range(row_count + 1, 51):
-            row = [''] * len(headers_data)
-            row[1] = i  # Task ID列填行号
-            ws_data.append(row)
+                table = get_first_table(ws_data)
+                if table:
+                    table.ref = f"A{min_row}:I{min_row + 50}"
 
-        # 写 CustomerInfo
-        headers_info = ['Index', 'User ID', 'Group ID', 'Plan ID', 'Task Number']
-        ws_info.append(headers_info)
+        # ---- CustomerInfo ----
+        if 'CustomerInfo' in wb.sheetnames:
+            ws_info = wb['CustomerInfo']
+            bounds = clear_table_data_and_get_bounds(ws_info)
+            if all(bounds):
+                min_row, min_col, max_col = bounds
 
-        for idx, planner in enumerate(planners, start=1):
-            row = [
-                idx,
-                1,  # 默认 User ID
-                planner.teams_id or '',
-                planner.plannerid or '',
-                1  # 默认 Task Number
-            ]
-            ws_info.append(row)
+                for idx, planner in enumerate(planners, start=1):
+                    row = [
+                        idx,
+                        1,
+                        planner.teams_id or '',
+                        planner.plannerid or '',
+                        1
+                    ]
+                    write_row = min_row + idx
+                    for col_idx, value in enumerate(row, start=1):
+                        ws_info.cell(row=write_row, column=col_idx, value=value)
+
+                table = get_first_table(ws_info)
+                if table:
+                    table.ref = f"A{min_row}:E{ws_info.max_row}"
 
         wb.save(save_path)
 
@@ -357,18 +377,20 @@ def export_tasks_excel(request):
     return render(request, 'projects/select_project.html', {'projects': projects})
 
 
+
+
+
 def export_tasks_txt(request):
-    # 获取所有项目，用于选择
+
     projects = Project.objects.all()
 
     if request.method == 'POST':
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
 
-        # 查询对应项目的任务
+
         tasks = Task.objects.filter(project=project)
 
-        # 创建一个新的 TXT 文件，保存项目相关信息和任务
         txt_save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\update_log.txt"
         with open(txt_save_path, 'w') as f:
             # 写入项目基本信息
@@ -389,7 +411,6 @@ def export_tasks_txt(request):
             except ProjectDetails.DoesNotExist:
                 f.write("No Project Details available\n\n")
 
-            # 写入 ProjectedInfo（如果有）
             try:
                 projected_info = ProjectedInfo.objects.get(project=project)
                 f.write(f"Business Process: {projected_info.business_process}\n")
@@ -411,7 +432,7 @@ def export_tasks_txt(request):
             except ProjectedInfo.DoesNotExist:
                 f.write("No Projected Info available\n\n")
 
-            # 写入任务信息
+
             f.write("Tasks:\n")
             for task in tasks:
                 assign_users = ', '.join([user.username for user in task.assign.all()])
@@ -420,7 +441,6 @@ def export_tasks_txt(request):
                 f.write(f"Status: {task.status}\n")
                 f.write(f"Due: {task.due}\n\n")
 
-        # 提示成功，返回导出页面
         return render(request, 'projects/select_project.html', {'projects': projects, 'message': 'AI Report updated successfully.'})
 
     return render(request, 'projects/select_project.html', {'projects': projects})
