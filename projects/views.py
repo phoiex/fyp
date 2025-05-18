@@ -266,28 +266,96 @@ from django.shortcuts import render
 from openpyxl import Workbook
 import os
 from .models import Project, Task, ProjectDetails, ProjectedInfo
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
+import os
 
 def export_tasks_excel(request):
-    # 获取所有项目，用于选择
+    from openpyxl import Workbook, load_workbook
+    import os
+
     projects = Project.objects.all()
 
     if request.method == 'POST':
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
         tasks = Task.objects.filter(project=project)
-        wb = Workbook()
-        ws = wb.active
-        ws.title = 'Tasks'
-        ws.append(['Task Name', 'Assign', 'Status', 'Due'])
-        for task in tasks:
-            assign_users = ', '.join([user.username for user in task.assign.all()])
-            ws.append([task.task_name, assign_users, task.status, task.due])
-        save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\tranexcel.xlsx"
+        planners = Planner.objects.all()  # 获取所有 Planner 数据
+
+        save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\test.xlsx"
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
+        # 打开或新建工作簿
+        if os.path.exists(save_path):
+            wb = load_workbook(save_path)
+            # 清除旧工作表
+            for sheet_name in ['CustomerData', 'CustomerInfo']:
+                if sheet_name in wb.sheetnames:
+                    wb.remove(wb[sheet_name])
+            ws_data = wb.create_sheet('CustomerData')
+            ws_info = wb.create_sheet('CustomerInfo')
+        else:
+            wb = Workbook()
+            ws_data = wb.active
+            ws_data.title = 'CustomerData'
+            ws_info = wb.create_sheet('CustomerInfo')
+
+        # 写 CustomerData（任务导出）
+        headers_data = [
+            'User ID', 'Task ID', 'Task Name', 'Assign', 'Status',
+            'Due', 'Task Description', 'Start Date', 'Due Date'
+        ]
+        ws_data.append(headers_data)
+
+        row_count = 0
+        for i, task in enumerate(tasks, start=1):
+            row_count += 1
+            assign_users = task.assign.all()
+            user_id = assign_users[0].id if assign_users else ''
+            assign_names = ', '.join([user.username for user in assign_users]) if assign_users else ''
+
+            row = [
+                user_id if user_id != '' else 0,
+                task.id if task.id else i,
+                task.task_name if task.task_name else 0,
+                assign_names if assign_names else 0,
+                task.get_status_display() if task.status else 0,
+                task.get_due_display() if task.due else 0,
+                task.task_description if task.task_description else 0,
+                task.start_date if task.start_date else 0,
+                task.due_date if task.due_date else 0,
+            ]
+            ws_data.append(row)
+
+        # 补足 Task ID 到50行
+        for i in range(row_count + 1, 51):
+            row = [''] * len(headers_data)
+            row[1] = i  # Task ID列填行号
+            ws_data.append(row)
+
+        # 写 CustomerInfo
+        headers_info = ['Index', 'User ID', 'Group ID', 'Plan ID', 'Task Number']
+        ws_info.append(headers_info)
+
+        for idx, planner in enumerate(planners, start=1):
+            row = [
+                idx,
+                1,  # 默认 User ID
+                planner.teams_id or '',
+                planner.plannerid or '',
+                1  # 默认 Task Number
+            ]
+            ws_info.append(row)
+
         wb.save(save_path)
-        return render(request, 'projects/select_project.html', {'projects': projects, 'message': 'Tasks exported to Excel successfully.'})
+
+        return render(request, 'projects/select_project.html', {
+            'projects': projects,
+            'message': 'finished'
+        })
 
     return render(request, 'projects/select_project.html', {'projects': projects})
+
 
 def export_tasks_txt(request):
     # 获取所有项目，用于选择
