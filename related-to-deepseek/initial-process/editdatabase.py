@@ -4,16 +4,16 @@ import sys
 import django
 import json
 import re
-from django.apps import apps
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # 添加 Django 项目路径
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-
-# 设置 Django 设置模块
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'manager.settings')
 django.setup()
 
 from projects.models import Task, User, Project
+
 
 def load_json_with_comments(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -23,9 +23,15 @@ def load_json_with_comments(file_path):
         data = data.replace("'", '"')
         return json.loads(data)
 
+
 def update_task_from_txt(file_path):
-    task_data = load_json_with_comments(file_path)
-    
+    print(f"Detected update in {file_path}, processing...")
+    try:
+        task_data = load_json_with_comments(file_path)
+    except Exception as e:
+        print(f"Failed to load JSON: {e}")
+        return
+
     operation = task_data.get("operation")
     task_info = task_data.get("tasks")
     task_id = task_data.get("task_id")
@@ -44,7 +50,7 @@ def update_task_from_txt(file_path):
             try:
                 project = Project.objects.get(id=project_id)
                 users = User.objects.filter(id__in=assigned_user_ids)
-                
+
                 new_task = Task.objects.create(
                     task_name=task_name,
                     project=project,
@@ -93,5 +99,28 @@ def update_task_from_txt(file_path):
     else:
         print(f"Invalid operation: {operation}")
 
-# 调用方法
-update_task_from_txt('assistant_reply1.txt')
+
+class TaskFileEventHandler(FileSystemEventHandler):
+    def __init__(self, file_path):
+        self.file_path = os.path.abspath(file_path)
+
+    def on_modified(self, event):
+        if os.path.abspath(event.src_path) == self.file_path:
+            update_task_from_txt(self.file_path)
+
+
+if __name__ == "__main__":
+    file_to_watch = 'assistant_reply1.txt'
+    path = os.path.dirname(os.path.abspath(file_to_watch))
+    event_handler = TaskFileEventHandler(file_to_watch)
+    observer = Observer()
+    observer.schedule(event_handler, path=path, recursive=False)
+    observer.start()
+    print(f"Watching for changes in {file_to_watch}...")
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()

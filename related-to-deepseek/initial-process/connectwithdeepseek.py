@@ -4,16 +4,11 @@ import traceback
 import os
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from dotenv import load_dotenv
 # from langchain_chroma import Chroma
 # from langchain_huggingface import HuggingFaceEmbeddings
 
-# Load environment variables from .env file
-load_dotenv()
-api_key = os.getenv("DEEPSEEK_API_KEY")
-
 # Initialize the OpenAI API client
-client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+client = OpenAI(api_key="sk-ac745008ee204352b31db43a04f483a3", base_url="https://api.deepseek.com")
 
 # # Initialize vector database
 # embedding_model = HuggingFaceEmbeddings(
@@ -94,7 +89,7 @@ def interact_with_deepseek(messages):
             "  ],\n"
             "  \"task_id\": 1 # Only required for 'update' or 'delete' operations (task id)\n"
             "}\n"
-            "Only return the JSON output - do not explain anything else.\n"
+            "Only return the JSON output – do not explain anything else.\n"
             "Note:\n"
             "- If it is a 'create' operation, please return a list of task information, each task is a dictionary.\n"
             "- If it is an 'update' operation, please return the task to be updated and its ID.\n"
@@ -104,23 +99,23 @@ def interact_with_deepseek(messages):
 
 
 
-# Create a file system event handling class
+# 创建文件系统事件处理类
 class FileChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        print(f"File modification detected: {event.src_path}")
+        print(f"检测到文件修改: {event.src_path}")
         
-        # Check if event.src_path is a file and if it is the target file
+        # 检查 event.src_path 是否为文件，以及是否是目标文件
         if os.path.isfile(event.src_path) and event.src_path.endswith(file_path):
-            # When a file is modified, read the new content
+            # 文件被修改时，读取新的内容
             try:
                 with open(file_path, "r", encoding="utf-8") as file:
                     file_content = file.read().strip()
                     if file_content:
-                        print(f"File content: {file_content}")  # Print file contents
-                        # Add new content as a user message to the message history
+                        print(f"文件内容: {file_content}")  # 打印文件内容
+                        # 将新的内容作为用户消息添加到消息历史
                         interact_with_deepseek(messages)
                         messages.append({"role": "user", "content": file_content})
-                        print(f"File content has been sent to DeepSeek: {file_content}")
+                        print(f"文件内容已发送给 DeepSeek: {file_content}")
                         
 
                         try:
@@ -151,30 +146,30 @@ class FileChangeHandler(FileSystemEventHandler):
 
 
                     else:
-                        print("The file content is empty and was not sent to DeepSeek.")
+                        print("文件内容为空，未发送到 DeepSeek。")
             except Exception as e:
-                print(f"Error reading file: {e}")
+                print(f"读取文件时出错: {e}")
                 traceback.print_exc()
         else:
             print()
 
 
 
-# Initialize file change observer
+# 初始化文件变更观察者
 def start_watching():
     event_handler = FileChangeHandler()
     observer = Observer()
-    observer.schedule(event_handler, path=".", recursive=False)  # Monitor current directory
+    observer.schedule(event_handler, path=".", recursive=False)  # 监视当前目录
     observer.start()
-    print("Start monitoring file changes...")
+    print("开始监视文件变化...")
 
     try:
         while True:
-            time.sleep(1)  # Keep the program running
+            time.sleep(1)  # 保持程序运行
     except KeyboardInterrupt:
         observer.stop()
-        print("Stop monitoring a file.")
+        print("停止监视文件。")
     observer.join()
 
-# Start file monitoring
+# 启动文件监控
 start_watching()
