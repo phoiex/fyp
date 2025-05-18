@@ -267,3 +267,10 @@ class ProjectedInfoForm(forms.ModelForm):
             'legal_compliance': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'class': 'form-control'}),
             'extra_information': forms.Textarea(attrs={'rows': 4, 'cols': 40, 'class': 'form-control'}),
         }
+from django import forms
+from .models import Planner
+
+class PlannerForm(forms.ModelForm):
+    class Meta:
+        model = Planner
+        fields = ['plannerid', 'teams_id']

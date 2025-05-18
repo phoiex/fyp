@@ -274,33 +274,17 @@ def export_tasks_excel(request):
     if request.method == 'POST':
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
-
-        # 查询对应项目的任务
         tasks = Task.objects.filter(project=project)
-
-        # 创建一个新的 Excel 工作簿
         wb = Workbook()
         ws = wb.active
         ws.title = 'Tasks'
-
-        # 写入标题行
         ws.append(['Task Name', 'Assign', 'Status', 'Due'])
-
-        # 将任务信息写入工作簿
         for task in tasks:
             assign_users = ', '.join([user.username for user in task.assign.all()])
             ws.append([task.task_name, assign_users, task.status, task.due])
-
-        # 设置文件保存路径
         save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\tranexcel.xlsx"
-
-        # 确保目录存在
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-
-        # 保存到指定路径
         wb.save(save_path)
-
-        # 给出一个提示，返回导出成功的页面
         return render(request, 'projects/select_project.html', {'projects': projects, 'message': 'Tasks exported to Excel successfully.'})
 
     return render(request, 'projects/select_project.html', {'projects': projects})
@@ -386,11 +370,6 @@ def export_tasks(request):
         # 获取用户选择的项目 ID
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
-
-        # 可以根据选择的项目来处理导出逻辑，下面是导出 Excel 和 TXT 文件的代码
-        # 这里可以调用之前定义的 export_tasks_excel 或 export_tasks_txt 函数
-        # 为简便起见，可以直接重定向或返回成功消息
-
         return render(request, 'projects/select_project.html', {'projects': projects, 'message': 'Project selected for export.'})
 
     # 如果是 GET 请求，显示所有项目的选择界面
@@ -401,3 +380,28 @@ from django.shortcuts import render
 
 def dual_view(request):
     return render(request, 'projects/dual_view.html')
+
+
+from django.shortcuts import render
+from .forms import PlannerForm
+from .models import Planner
+
+def export_tasks_planner(request):
+    success_message = ''
+    if request.method == 'POST':
+        form = PlannerForm(request.POST)
+        if form.is_valid():
+            planner_instance = Planner.objects.first()
+            if planner_instance:
+                planner_instance.plannerid = form.cleaned_data['plannerid']
+                planner_instance.teams_id = form.cleaned_data['teams_id']
+                planner_instance.save()
+            else:
+                form.save()
+            success_message = 'submit successfully'
+            form = PlannerForm() 
+    else:
+        form = PlannerForm()
+    return render(request, 'projects/loginmicrosoft.html', {'form': form, 'success_message': success_message})
+
+

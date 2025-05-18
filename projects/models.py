@@ -94,3 +94,12 @@ class ProjectedInfo(models.Model):
     def __str__(self):
         return f"Projected Info for {self.project.name}"
 
+from django.db import models
+from django.contrib.auth.models import User
+
+class Planner(models.Model):
+    plannerid = models.CharField(max_length=100, blank=True, null=True)  # 普通文本字段
+    teams_id = models.CharField(max_length=100, blank=True, null=True)   # 普通文本字段，不是外键
+
+    def __str__(self):
+        return self.plannerid or "Unnamed Planner"

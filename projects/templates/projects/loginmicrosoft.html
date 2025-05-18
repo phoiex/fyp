@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item">Projects</li>
+<li class="breadcrumb-item active">Export Tasks</li>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+<div class="container mt-4" style="max-width: 600px;">
+    {% if success_message %}
+        <div class="alert alert-success" role="alert">
+            {{ success_message }}
+        </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <table class="table table-bordered">
+            {{ form.as_table }}
+        </table>
+        <button type="submit" class="btn btn-primary">提交</button>
+    </form>
+</div>
+
+{% endblock %}

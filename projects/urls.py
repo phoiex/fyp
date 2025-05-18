@@ -16,5 +16,6 @@ urlpatterns = [
     path('export-tasks/excel/', views.export_tasks_excel, name='export_tasks_excel'),
     path('export-tasks/txt/', views.export_tasks_txt, name='export_tasks_txt'),
     path('export_tasks/', views.export_tasks, name='select_project'),
+    path('planner/', views.export_tasks_planner, name='export_tasks'),
     path('dual/', views.dual_view, name='dual_view'),
 ]
