@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run All Scripts",
+      "dependsOn": [
+        "Run copilotconnectcopy.py",
+        "Run connectwithdeepseek.py",
+        "Run editdatabase.py",
+        "Run run-2.py"
+      ],
+      "dependsOrder": "parallel"
+    },
+    {
+      "label": "Run copilotconnectcopy.py",
+      "type": "shell",
+      "command": "python",
+      "args": ["copilotconnection/copilotconnectcopy.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run connectwithdeepseek.py",
+      "type": "shell",
+      "command": "python",
+      "args": ["related-to-deepseek/initial-process/connectwithdeepseek.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run editdatabase.py",
+      "type": "shell",
+      "command": "python",
+      "args": ["related-to-deepseek/initial-process/editdatabase.py"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Run run-2.py",
+      "type": "shell",
+      "command": "python",
+      "args": ["related-to-deepseek/run-2.py"],
+      "problemMatcher": []
+    }
+  ]
+}
