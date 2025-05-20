@@ -3,16 +3,16 @@ import sys
 import django
 from django.apps import apps
 
-# 将项目根目录添加到 sys.path 中，确保 Django 可以找到 manager/settings.py
+# Add the project root directory to sys.path to ensure Django can find manager/settings.py
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-# 设置 Django 的 settings 模块路径
+# Set Django's settings module path
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'manager.settings')
 
-# 初始化 Django 环境
+# Initialize the Django environment
 django.setup()
 
-# 定义我们关心的模型名称（只关心 'Project' 和 'Task'）
+# Define the model names we care about (only 'Project' and 'Task')
 target_models = [
     'projects.project',  
     'projects.ProjectDetails',
@@ -20,37 +20,37 @@ target_models = [
     'projects.ProjectedInfo'  
 ]
 
-# 保存所有模型数据到txt文件（覆盖旧文件）
+# Save all model data to txt file (overwrite old file)
 def save_data_to_txt(data):
     with open("classproject.txt", "w", encoding="utf-8") as file:
         for record in data:
             file.write(str(record) + "\n")
     print("Data saved to classproject.txt")
 
-# 查询所有模型数据并保存到文件
+# Query all model data and save to file
 def check_for_updates():
     all_data = []
     for model_name in target_models:
         try:
-            # 获取模型
+            # Get the model
             model = apps.get_model(model_name)
             print(f"Checking updates for Model: {model.__name__}")
 
-            # 获取模型的所有数据
+            # Get all the data of the model
             data = model.objects.all().values()
             if data:
-                all_data.extend(data)  # 将所有数据添加到 all_data 列表中
+                all_data.extend(data)
             else:
                 print(f"No data found in model {model.__name__}")
 
         except LookupError:
             print(f"Model '{model_name}' not found.")
     
-    # 保存所有模型的数据到 txt 文件
+    # Save all model data to txt file
     if all_data:
         save_data_to_txt(all_data)
 
 
-# 程序启动后立即执行数据库检查
+# Perform a database check immediately after the program starts
 if __name__ == "__main__":
     check_for_updates()

@@ -79,8 +79,8 @@ def newCompany(request):
                 'created': created,
                 'form': form,
             }
-            # 使用绝对路径重定向
-            return redirect('/projects/new-project/')  # 这里是绝对路径
+            # Use absolute path redirection
+            return redirect('/projects/new-project/')
         else:
             return render(request, 'register/new_company.html', context)
     else:

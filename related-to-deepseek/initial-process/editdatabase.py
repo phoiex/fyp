@@ -7,7 +7,7 @@ import re
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-# 添加 Django 项目路径
+# Add Django project path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'manager.settings')
 django.setup()

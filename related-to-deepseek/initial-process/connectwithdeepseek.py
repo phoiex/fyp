@@ -99,23 +99,23 @@ def interact_with_deepseek(messages):
 
 
 
-# 创建文件系统事件处理类
+# Create a file system event processing class
 class FileChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        print(f"检测到文件修改: {event.src_path}")
+        print(f"File modification detected: {event.src_path}")
         
-        # 检查 event.src_path 是否为文件，以及是否是目标文件
+        # Check if event.src_path is a file and if it is the target file
         if os.path.isfile(event.src_path) and event.src_path.endswith(file_path):
-            # 文件被修改时，读取新的内容
+            # When a file is modified, read the new content
             try:
                 with open(file_path, "r", encoding="utf-8") as file:
                     file_content = file.read().strip()
                     if file_content:
-                        print(f"文件内容: {file_content}")  # 打印文件内容
-                        # 将新的内容作为用户消息添加到消息历史
+                        print(f"File content: {file_content}")  # Print file contents
+                        # Add new content as a user message to the message history
                         interact_with_deepseek(messages)
                         messages.append({"role": "user", "content": file_content})
-                        print(f"文件内容已发送给 DeepSeek: {file_content}")
+                        print(f"File content has been sent to DeepSeek: {file_content}")
                         
 
                         try:
@@ -146,30 +146,30 @@ class FileChangeHandler(FileSystemEventHandler):
 
 
                     else:
-                        print("文件内容为空，未发送到 DeepSeek。")
+                        print("The file content is empty and not sent to DeepSeek.")
             except Exception as e:
-                print(f"读取文件时出错: {e}")
+                print(f"Error reading file:{e}")
                 traceback.print_exc()
         else:
             print()
 
 
 
-# 初始化文件变更观察者
+# Initialize file change observer
 def start_watching():
     event_handler = FileChangeHandler()
     observer = Observer()
-    observer.schedule(event_handler, path=".", recursive=False)  # 监视当前目录
+    observer.schedule(event_handler, path=".", recursive=False) # Monitor the current directory
     observer.start()
-    print("开始监视文件变化...")
+    print("Start monitoring file changes...")
 
     try:
         while True:
-            time.sleep(1)  # 保持程序运行
+            time.sleep(1)  # Keep the program running
     except KeyboardInterrupt:
         observer.stop()
-        print("停止监视文件。")
+        print("Stop monitoring a file.")
     observer.join()
 
-# 启动文件监控
+# Start file monitoring
 start_watching()
