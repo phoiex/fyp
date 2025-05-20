@@ -55,7 +55,7 @@ def newProject(request):
     if request.method == 'POST':
         form = ProjectRegistrationForm(request.POST)
         if form.is_valid():
-            project = form.save()  # 来来来你告诉你爸为什么这个save能报错
+            project = form.save()
             project_dict = {
                 'id': project.id,
                 'name': project.name,
@@ -124,7 +124,7 @@ def project_details_view(request):
             selected_project = details.project
             tasks = Task.objects.filter(project=selected_project).prefetch_related('assign')
 
-            # 保存项目数据到txt
+            # Save project data to txt
             merged_data = {
                 'id': selected_project.id,
                 'name': selected_project.name,
@@ -159,7 +159,7 @@ def project_details_view(request):
         'form': form,
         'tasks': tasks,
         'selected_project': selected_project,
-        'projects': Project.objects.all(),  # 用于填充下拉框
+        'projects': Project.objects.all(),
     })
 
 
@@ -175,7 +175,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def project_detail_edit(request):
-# 获取所有项目
+# Get all items
     projects = Project.objects.all()
     project_data = []
 
@@ -183,9 +183,9 @@ def project_detail_edit(request):
         project_details = ProjectDetails.objects.get(project=project)
         tasks = Task.objects.filter(project=project)
         
-        # 处理表单提交
+        # Handle form submission
         if request.method == 'POST':
-            # 为每个项目创建表单实例
+            # Create a form instance for each item
             project_form = ProjectForm(request.POST, instance=project)
             project_details_form = ProjectDetailsFormedit(request.POST, instance=project_details)
             task_forms = {task.id: TaskForm(request.POST, instance=task) for task in tasks}
@@ -197,12 +197,12 @@ def project_detail_edit(request):
                     task_form.save()
                
         else:
-            # 在初次加载页面时创建表单实例
+            # Create a form instance when the page is first loaded
             project_form = ProjectForm(instance=project)
             project_details_form = ProjectDetailsFormedit(instance=project_details)
             task_forms = {task.id: TaskForm(instance=task) for task in tasks}
 
-        # 保存项目数据和表单
+        # Saving project data and forms
         project_data.append({
             'project': project,
             'project_details': project_details,
@@ -226,9 +226,9 @@ def projected_info_add(request):
     if request.method == 'POST':
         form = ProjectedInfoForm(request.POST)
         if form.is_valid():
-            # 保存表单数据
+            # Save form data
             form.save()
-            return redirect('projects:projects')  # 提交后跳转到项目列表页面
+            return redirect('projects:projects')  # After submitting, jump to the project list page
     else:
         form = ProjectedInfoForm()
     
@@ -240,19 +240,19 @@ import subprocess
 from django.shortcuts import render
 from django.http import HttpResponse
 
-# 视图函数来处理表单提交
+# View function to handle form submission
 def run_scripts(request):
     if request.method == "POST":
         try:
-            # 运行 editdatabase.py
+            # run editdatabase.py
             subprocess.run(["python", "path_to_your_script/editdatabase.py"], check=True)
 
-            # 运行 run-2.py
+            # run run-2.py
             subprocess.run(["python", "path_to_your_script/run-2.py"], check=True)
 
-            return HttpResponse("脚本运行成功！")
+            return HttpResponse("The script runs successfully！")
         except subprocess.CalledProcessError as e:
-            return HttpResponse(f"运行失败: {e}")
+            return HttpResponse(f"The script runs fail: {e}")
 
     return render(request, 'projects/project_details_form.html')
 
@@ -394,13 +394,13 @@ def export_tasks_txt(request):
         txt_save_path = r"C:\Users\17905\Desktop\acdemic\UM\FYP\project-management-system-master\update_log.txt"
         with open(txt_save_path, 'w', encoding='utf-8') as f:
 
-            # 写入项目基本信息
+            # Write basic project information
             f.write(f"Project Name: {project.name}\n")
             f.write(f"Project Description: {project.description}\n")
             f.write(f"Deadline: {project.dead_line}\n")
             f.write(f"Company: {project.company.name}\n\n")
 
-            # 写入 ProjectDetails（如果有）
+            # Write ProjectDetails (if any)
             try:
                 project_details = ProjectDetails.objects.get(project=project)
                 f.write(f"Problem Statement: {project_details.problem_statement}\n")
@@ -451,17 +451,17 @@ from django.shortcuts import render
 from .models import Project
 
 def export_tasks(request):
-    # 获取所有项目，用于选择
+    # Get all items for selection
     projects = Project.objects.all()
 
-    # 如果是 POST 请求，用户选择了项目进行导出
+    # If it is a POST request, the user has selected items to export
     if request.method == 'POST':
-        # 获取用户选择的项目 ID
+        # Get the project ID selected by the user
         project_id = request.POST.get('project')
         project = Project.objects.get(id=project_id)
         return render(request, 'projects/select_project.html', {'projects': projects, 'message': 'Project selected for export.'})
 
-    # 如果是 GET 请求，显示所有项目的选择界面
+    # If it is a GET request, display the selection interface for all items
     return render(request, 'projects/select_project.html', {'projects': projects})
 
 

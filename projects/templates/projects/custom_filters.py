@@ -1,4 +1,4 @@
-# 在您的应用程序下的templatetags目录中创建custom_filters.py文件
+# Create a custom_filters.py file in the templatetags directory under your application
 from django import template
 
 register = template.Library()

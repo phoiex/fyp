@@ -56,13 +56,13 @@ class Task(models.Model):
 
 
 class ProjectDetails(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE)  # 通过外键连接Project
-    problem_statement = models.TextField()  # 问题陈述
-    project_objectives = models.TextField()  # 项目目标
-    project_scope = models.TextField()  # 项目范围
-    goals = models.TextField()  # 项目目标
-    assumptions = models.TextField()  # 假设
-    constraints = models.TextField()  # 约束
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)  # Connecting Projects via foreign keys
+    problem_statement = models.TextField()
+    project_objectives = models.TextField()
+    project_scope = models.TextField()
+    goals = models.TextField()
+    assumptions = models.TextField()
+    constraints = models.TextField()
 
     def __str__(self):
         return f"Project Details for {self.project.name}"
@@ -72,24 +72,24 @@ class ProjectDetails(models.Model):
 from django.db import models
 
 class ProjectedInfo(models.Model):
-    project = models.OneToOneField(Project, on_delete=models.CASCADE)  # 通过外键连接Project
+    project = models.OneToOneField(Project, on_delete=models.CASCADE)  # Connecting Projects via foreign keys
     
-    business_process = models.TextField(blank=True, null=True)  # 允许为空
-    user_requirements = models.TextField(blank=True, null=True)  # 允许为空
-    non_functional_requirements = models.TextField(blank=True, null=True)  # 允许为空
-    user_roles_permissions = models.TextField(blank=True, null=True)  # 允许为空
-    system_integration = models.TextField(blank=True, null=True)  # 允许为空
-    technical_architecture = models.TextField(blank=True, null=True)  # 允许为空
-    data_management = models.TextField(blank=True, null=True)  # 允许为空
-    ui_interaction_design = models.TextField(blank=True, null=True)  # 允许为空
-    security_compliance = models.TextField(blank=True, null=True)  # 允许为空
-    acceptance_criteria = models.TextField(blank=True, null=True)  # 允许为空
-    project_budget = models.TextField(blank=True, null=True)  # 允许为空
-    project_timeline = models.TextField(blank=True, null=True)  # 允许为空
-    risk_management = models.TextField(blank=True, null=True)  # 允许为空
-    post_deployment_support = models.TextField(blank=True, null=True)  # 允许为空
-    legal_compliance = models.TextField(blank=True, null=True)  # 允许为空
-    extra_information = models.TextField(blank=True, null=True)  # 允许为空
+    business_process = models.TextField(blank=True, null=True)
+    user_requirements = models.TextField(blank=True, null=True)
+    non_functional_requirements = models.TextField(blank=True, null=True)
+    user_roles_permissions = models.TextField(blank=True, null=True)
+    system_integration = models.TextField(blank=True, null=True)
+    technical_architecture = models.TextField(blank=True, null=True)
+    data_management = models.TextField(blank=True, null=True)
+    ui_interaction_design = models.TextField(blank=True, null=True)
+    security_compliance = models.TextField(blank=True, null=True)
+    acceptance_criteria = models.TextField(blank=True, null=True)
+    project_budget = models.TextField(blank=True, null=True)
+    project_timeline = models.TextField(blank=True, null=True)
+    risk_management = models.TextField(blank=True, null=True)
+    post_deployment_support = models.TextField(blank=True, null=True)
+    legal_compliance = models.TextField(blank=True, null=True)
+    extra_information = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Projected Info for {self.project.name}"
@@ -98,8 +98,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Planner(models.Model):
-    plannerid = models.CharField(max_length=100, blank=True, null=True)  # 普通文本字段
-    teams_id = models.CharField(max_length=100, blank=True, null=True)   # 普通文本字段，不是外键
+    plannerid = models.CharField(max_length=100, blank=True, null=True)
+    teams_id = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.plannerid or "Unnamed Planner"
