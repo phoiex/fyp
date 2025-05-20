@@ -2,21 +2,26 @@ from openai import OpenAI
 import time
 import traceback
 import os
+from dotenv import load_dotenv
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-# from langchain_chroma import Chroma
-# from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
+
+# Load environment variables from .env file
+load_dotenv()
+api_key = os.getenv("DEEPSEEK_API_KEY")
 
 # Initialize the OpenAI API client
-client = OpenAI(api_key="sk-ac745008ee204352b31db43a04f483a3", base_url="https://api.deepseek.com")
+client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
 
-# # Initialize vector database
-# embedding_model = HuggingFaceEmbeddings(
-#     model_name="sentence-transformers/all-mpnet-base-v2",
-#     model_kwargs={'device': 'cpu'}
-# )
-# db_dir = os.path.join(os.path.dirname(__file__), "./chroma_db")
-# vectordb = Chroma(persist_directory=db_dir, embedding_function=embedding_model)
+# Initialize vector database
+embedding_model = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-mpnet-base-v2",
+    model_kwargs={'device': 'cpu'}
+)
+db_dir = os.path.join(os.path.dirname(__file__), "./chroma_db")
+vectordb = Chroma(persist_directory=db_dir, embedding_function=embedding_model)
 
 
 # Get and print the current working directory
@@ -32,8 +37,8 @@ messages = []
 # Interact with DeepSeek and generate JSON output
 def interact_with_deepseek(messages):
     # Vector retrieval context
-    # docs = vectordb.similarity_search(messages, k=10)
-    # context = "\n\n".join(doc.page_content for doc in docs)
+    docs = vectordb.similarity_search(messages, k=10)
+    context = "\n\n".join(doc.page_content for doc in docs)
 
     # Add initialized system messages to messages
     messages.append({
